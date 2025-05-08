@@ -2,11 +2,18 @@
 
 import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { players } from "@/lib/data"
-import { ArrowLeft, Edit, Trash } from "lucide-react"
+import { ArrowLeft, DollarSign, ExternalLink } from "lucide-react"
+import Link from "next/link"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { PlayerCareerHistory } from "@/components/player-career-history"
+import { PlayerAchievements } from "@/components/player-achievements"
+import { PlayerStats } from "@/components/player-stats"
+import { PlayerDonation } from "@/components/player-donation"
 
 export default function PlayerDetailsPage() {
   const params = useParams()
@@ -47,106 +54,128 @@ export default function PlayerDetailsPage() {
 
   return (
     <div className="container py-8">
-      <div className="mb-8 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="outline" size="icon" onClick={() => router.push("/players")}>
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">{player.name}</h1>
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground">{player.position}</span>
-              <span className="text-muted-foreground">•</span>
-              <span className="text-muted-foreground">{player.team}</span>
-              <span className="text-muted-foreground">•</span>
-              <Badge className={getStatusColor(player.status)} variant="outline">
-                {player.status}
-              </Badge>
-            </div>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline">
-            <Edit className="mr-2 h-4 w-4" />
-            Edit
-          </Button>
-          <Button variant="destructive">
-            <Trash className="mr-2 h-4 w-4" />
-            Delete
-          </Button>
-        </div>
+      <div className="mb-8 flex items-center gap-4">
+        <Button variant="outline" size="icon" onClick={() => router.push("/players")}>
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+        <h1 className="text-3xl font-bold tracking-tight">Player Profile</h1>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Player Information</CardTitle>
-            <CardDescription>Personal and physical details</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <dl className="grid grid-cols-2 gap-4">
-              <div>
-                <dt className="text-sm font-medium text-muted-foreground">Age</dt>
-                <dd className="text-lg">{player.age}</dd>
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card className="md:col-span-1">
+          <CardContent className="p-6">
+            <div className="flex flex-col items-center text-center">
+              <Avatar className="h-32 w-32">
+                <AvatarImage
+                  src={`/placeholder.svg?height=128&width=128&text=${player.name.charAt(0)}`}
+                  alt={player.name}
+                />
+                <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <h2 className="mt-4 text-2xl font-bold">{player.name}</h2>
+              <div className="mt-1 flex items-center justify-center gap-2">
+                <Badge className={getStatusColor(player.status)} variant="outline">
+                  {player.status}
+                </Badge>
+                <Badge variant="outline">{player.position}</Badge>
               </div>
-              <div>
-                <dt className="text-sm font-medium text-muted-foreground">Jersey Number</dt>
-                <dd className="text-lg">{player.jerseyNumber}</dd>
+              <div className="mt-4 flex items-center justify-center gap-2">
+                <Badge variant="secondary" className="text-lg">
+                  #{player.jerseyNumber}
+                </Badge>
               </div>
-              <div>
-                <dt className="text-sm font-medium text-muted-foreground">Height</dt>
-                <dd className="text-lg">{player.height}</dd>
+              <div className="mt-6 grid w-full grid-cols-2 gap-4 text-sm">
+                <div className="flex flex-col items-center">
+                  <span className="text-muted-foreground">Team</span>
+                  <span className="font-medium">{player.team}</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="text-muted-foreground">Age</span>
+                  <span className="font-medium">{player.age}</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="text-muted-foreground">Height</span>
+                  <span className="font-medium">{player.height}</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="text-muted-foreground">Weight</span>
+                  <span className="font-medium">{player.weight}</span>
+                </div>
+                <div className="col-span-2 flex flex-col items-center">
+                  <span className="text-muted-foreground">Nationality</span>
+                  <span className="font-medium">{player.nationality}</span>
+                </div>
               </div>
-              <div>
-                <dt className="text-sm font-medium text-muted-foreground">Weight</dt>
-                <dd className="text-lg">{player.weight}</dd>
+              <Separator className="my-6" />
+              <div className="flex w-full flex-col gap-4">
+                <h3 className="text-lg font-medium">Bio</h3>
+                <p className="text-sm text-muted-foreground text-left">{player.bio}</p>
               </div>
-              <div>
-                <dt className="text-sm font-medium text-muted-foreground">Nationality</dt>
-                <dd className="text-lg">{player.nationality}</dd>
+              <Separator className="my-6" />
+              <div className="flex w-full flex-col gap-4">
+                <h3 className="text-lg font-medium">Social Media</h3>
+                <div className="flex justify-center gap-4">
+                  {player.socialLinks.twitter && (
+                    <Link href={player.socialLinks.twitter} target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" size="icon">
+                        <ExternalLink className="h-4 w-4" />
+                        <span className="sr-only">Twitter</span>
+                      </Button>
+                    </Link>
+                  )}
+                  {player.socialLinks.instagram && (
+                    <Link href={player.socialLinks.instagram} target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" size="icon">
+                        <ExternalLink className="h-4 w-4" />
+                        <span className="sr-only">Instagram</span>
+                      </Button>
+                    </Link>
+                  )}
+                  {player.socialLinks.facebook && (
+                    <Link href={player.socialLinks.facebook} target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" size="icon">
+                        <ExternalLink className="h-4 w-4" />
+                        <span className="sr-only">Facebook</span>
+                      </Button>
+                    </Link>
+                  )}
+                </div>
               </div>
-              <div>
-                <dt className="text-sm font-medium text-muted-foreground">Team</dt>
-                <dd className="text-lg">{player.team}</dd>
-              </div>
-            </dl>
+              {player.donationEnabled && (
+                <>
+                  <Separator className="my-6" />
+                  <Button className="w-full">
+                    <DollarSign className="mr-2 h-4 w-4" />
+                    Support This Player
+                  </Button>
+                </>
+              )}
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Performance Statistics</CardTitle>
-            <CardDescription>Season performance metrics</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <dl className="space-y-4">
-              <div>
-                <dt className="text-sm font-medium text-muted-foreground">Games Played</dt>
-                <dd className="text-lg">{player.stats.gamesPlayed}</dd>
-                <Separator className="my-2" />
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-muted-foreground">Goals Scored</dt>
-                <dd className="text-lg">{player.stats.goalsScored}</dd>
-                <Separator className="my-2" />
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-muted-foreground">Assists</dt>
-                <dd className="text-lg">{player.stats.assists}</dd>
-                <Separator className="my-2" />
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-muted-foreground">Yellow Cards</dt>
-                <dd className="text-lg">{player.stats.yellowCards}</dd>
-                <Separator className="my-2" />
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-muted-foreground">Red Cards</dt>
-                <dd className="text-lg">{player.stats.redCards}</dd>
-              </div>
-            </dl>
-          </CardContent>
-        </Card>
+        <div className="md:col-span-2 space-y-6">
+          <Tabs defaultValue="stats">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="stats">Statistics</TabsTrigger>
+              <TabsTrigger value="career">Career History</TabsTrigger>
+              <TabsTrigger value="achievements">Achievements</TabsTrigger>
+              <TabsTrigger value="support">Support</TabsTrigger>
+            </TabsList>
+            <TabsContent value="stats" className="mt-6">
+              <PlayerStats player={player} />
+            </TabsContent>
+            <TabsContent value="career" className="mt-6">
+              <PlayerCareerHistory player={player} />
+            </TabsContent>
+            <TabsContent value="achievements" className="mt-6">
+              <PlayerAchievements player={player} />
+            </TabsContent>
+            <TabsContent value="support" className="mt-6">
+              <PlayerDonation player={player} />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   )

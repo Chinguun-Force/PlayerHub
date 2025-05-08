@@ -7,8 +7,8 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Player Management System",
-  description: "A comprehensive system for managing player details",
+  title: "PlayerHub - Connect with Athletes",
+  description: "The ultimate platform for players, teams, and fans",
     generator: 'v0.dev'
 }
 

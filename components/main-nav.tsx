@@ -4,92 +4,92 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { ChevronDown, LogOut, Settings, User } from "lucide-react"
+import { Award, Home, Menu, Trophy, Users } from "lucide-react"
+import { useState } from "react"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 export function MainNav() {
   const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false)
 
   const routes = [
     {
-      href: "/dashboard",
-      label: "Dashboard",
-      active: pathname === "/dashboard",
+      href: "/",
+      label: "Home",
+      active: pathname === "/",
+      icon: <Home className="h-4 w-4 mr-2" />,
     },
     {
       href: "/players",
       label: "Players",
-      active: pathname === "/players",
+      active: pathname === "/players" || pathname?.startsWith("/players/"),
+      icon: <Users className="h-4 w-4 mr-2" />,
     },
     {
       href: "/teams",
       label: "Teams",
-      active: pathname === "/teams",
+      active: pathname === "/teams" || pathname?.startsWith("/teams/"),
+      icon: <Trophy className="h-4 w-4 mr-2" />,
     },
     {
-      href: "/statistics",
-      label: "Statistics",
-      active: pathname === "/statistics",
+      href: "/playoffs",
+      label: "Playoffs",
+      active: pathname === "/playoffs",
+      icon: <Award className="h-4 w-4 mr-2" />,
     },
   ]
 
   return (
-    <div className="mr-4 flex">
-      <Link href="/" className="mr-6 flex items-center space-x-2">
-        <span className="hidden font-bold sm:inline-block">Player Management</span>
+    <div className="flex items-center">
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger asChild className="lg:hidden">
+          <Button variant="ghost" size="icon" className="mr-2">
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Toggle menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+          <nav className="flex flex-col gap-4">
+            <Link href="/" className="flex items-center gap-2 font-semibold" onClick={() => setIsOpen(false)}>
+              <Trophy className="h-6 w-6" />
+              <span className="font-bold">PlayerHub</span>
+            </Link>
+            <div className="grid gap-2 pt-4">
+              {routes.map((route) => (
+                <Link
+                  key={route.href}
+                  href={route.href}
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md",
+                    route.active ? "bg-primary text-primary-foreground" : "hover:bg-muted",
+                  )}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {route.icon}
+                  {route.label}
+                </Link>
+              ))}
+            </div>
+          </nav>
+        </SheetContent>
+      </Sheet>
+      <Link href="/" className="flex items-center gap-2 font-semibold">
+        <Trophy className="h-6 w-6" />
+        <span className="font-bold hidden md:inline-block">PlayerHub</span>
       </Link>
-      <nav className="flex items-center space-x-6 text-sm font-medium">
+      <nav className="mx-6 hidden items-center space-x-4 lg:space-x-6 lg:flex">
         {routes.map((route) => (
           <Link
             key={route.href}
             href={route.href}
             className={cn(
-              "transition-colors hover:text-primary",
+              "text-sm font-medium transition-colors hover:text-primary",
               route.active ? "text-primary" : "text-muted-foreground",
             )}
           >
             {route.label}
           </Link>
         ))}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="gap-1">
-              <User className="h-4 w-4" />
-              <span>Account</span>
-              <ChevronDown className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/profile">
-                <User className="mr-2 h-4 w-4" />
-                Profile
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/settings">
-                <Settings className="mr-2 h-4 w-4" />
-                Settings
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/auth/login">
-                <LogOut className="mr-2 h-4 w-4" />
-                Logout
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </nav>
     </div>
   )

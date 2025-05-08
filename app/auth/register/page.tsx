@@ -11,12 +11,14 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 export default function RegisterPage() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [userType, setUserType] = useState("fan")
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
@@ -41,7 +43,7 @@ export default function RegisterPage() {
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       // In a real app, you would call your registration API here
-      // const response = await register(name, email, password)
+      // const response = await register(name, email, password, userType)
 
       toast({
         title: "Registration successful",
@@ -116,6 +118,34 @@ export default function RegisterPage() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
+          </div>
+          <div className="space-y-2">
+            <Label>I am a:</Label>
+            <RadioGroup
+              defaultValue="fan"
+              value={userType}
+              onValueChange={setUserType}
+              className="flex flex-col space-y-1"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="fan" id="fan" />
+                <Label htmlFor="fan" className="font-normal">
+                  Fan
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="player" id="player" />
+                <Label htmlFor="player" className="font-normal">
+                  Player
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="team-owner" id="team-owner" />
+                <Label htmlFor="team-owner" className="font-normal">
+                  Team Owner
+                </Label>
+              </div>
+            </RadioGroup>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
