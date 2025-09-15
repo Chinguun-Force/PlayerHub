@@ -43,8 +43,8 @@ export interface PlayerProfile {
   jerseyNumber: number;
   status: string;
   bio: string;
-  careerHistory: Array<any>;
-  achievements: Array<any>;
+  careerHistory: Array<unknown>;
+  achievements: Array<unknown>;
   stats?: PlayerStats;
   socialLinks: {
     twitter?: string;
@@ -53,3 +53,23 @@ export interface PlayerProfile {
   };
   donationEnabled: boolean;
 } 
+// types/types.ts
+export interface Player {
+  _id: string;
+  profilePicture: string;
+  name: string;
+  position: string;
+  teamId: string;
+  nationality: string;
+  age: number;
+  jerseyNumber: number;
+  status: "ACTIVE" | "INJURED" | "SUSPENDED" | "INACTIVE";
+  height: number;
+  weight: number;
+  marketValue: number;
+}
+
+export interface ApiResponse {
+  players: Player[];
+  total: number;
+}

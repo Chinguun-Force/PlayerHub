@@ -1,15 +1,14 @@
 "use client"
-
 import type React from "react"
 
 import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { LoadingLink } from "@/components/LoadingLink"
+import { useNavigationLoader } from "@/hooks/useNavigationLoader"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
@@ -21,28 +20,14 @@ export default function RegisterPage() {
   const [role, setRole] = useState("FAN")
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const router = useRouter()
-  const { toast } = useToast()
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL
+  const { pushWithLoader } = useNavigationLoader()
 
-  const handleTestClick = () => {
-    setName("Test User");
-
-    setEmail(`test@gmail.com`);
-    setPassword("Shine2025*");
-    setConfirmPassword("Shine2025*");
-    setRole("PLAYER");
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (password !== confirmPassword) {
-      toast({
-        variant: "destructive",
-        title: "Passwords do not match",
-        description: "Please make sure your passwords match",
-      })
+      toast.error("Passwords do not match")
       return
     }
 
@@ -62,18 +47,11 @@ export default function RegisterPage() {
         throw new Error(errorData.error || 'Registration failed')
       }
 
-      toast({
-        title: "Registration successful",
-        description: "Welcome to the Player Management System",
-      })
+      toast.success("Registration successful! Please log in.")
 
-      router.push("/auth/login")
-    } catch (error){
-      toast({
-        variant: "destructive",
-        title: "Registration failed",
-        description: "Please check your credentials and try again",
-      })
+      pushWithLoader("/auth/login")
+    } catch {
+      toast.error("Registration failed")
     } finally {
       setIsLoading(false)
     }
@@ -85,7 +63,7 @@ export default function RegisterPage() {
         <CardTitle className="text-2xl">Create an account</CardTitle>
         <CardDescription>Enter your details to create your account</CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
@@ -166,9 +144,6 @@ export default function RegisterPage() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button type="button" variant="outline" className="w-full" onClick={handleTestClick}>
-            Fill with Test Data
-          </Button>
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? (
               <>
@@ -181,9 +156,9 @@ export default function RegisterPage() {
           </Button>
           <div className="text-center text-sm">
             Already have an account?{" "}
-            <Link href="/auth/login" className="text-primary underline-offset-4 hover:underline">
+            <LoadingLink href="/auth/login" className="text-primary underline-offset-4 hover:underline">
               Login
-            </Link>
+            </LoadingLink>
           </div>
         </CardFooter>
       </form>

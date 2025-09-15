@@ -1,8 +1,8 @@
 "use client"
 import type React from "react"
 import { useState, useEffect } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { LoadingLink } from "@/components/LoadingLink"
+import { useNavigationLoader } from "@/hooks/useNavigationLoader"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -20,8 +20,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const router = useRouter()
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL
+  const { pushWithLoader } = useNavigationLoader()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
@@ -51,7 +50,7 @@ export default function LoginPage() {
     const decodedToken = jwtDecode<DecodedToken>(data.token)
 
     if (decodedToken.user.role === "FAN") {
-      router.push("/")
+      pushWithLoader("/")
     } else if (decodedToken.user.role === "PLAYER") {
       const profileResponse = await fetch('/api/auth/profile', {
         headers: {
@@ -62,7 +61,7 @@ export default function LoginPage() {
         const profileError = await profileResponse.json()
         if (profileError.message === "Player not found") {
           toast.info("Profile setup required")
-          router.push("/players/createPlayer")
+          pushWithLoader("/players/createPlayer")
           return
         }
         throw new Error("Failed to fetch profile")
@@ -71,17 +70,16 @@ export default function LoginPage() {
       console.log(myProfile)
       useProfileStore.getState().setProfile(myProfile.player)
       if (myProfile.player) {
-        router.push("/players")
+        pushWithLoader("/players")
       }
     } else if (decodedToken.user.role === "OWNER") {
-      router.push("/dashboard/team-owner")
+      pushWithLoader("/dashboard/team-owner")
     } else if (decodedToken.user.role === "ADMIN") {
-      router.push("/dashboard")
+      pushWithLoader("/dashboard")
     } else {
-
-      router.push("/dashboard")
+      pushWithLoader("/dashboard")
     }
-  } catch (error) {
+  } catch {
     toast.error("login failed")
   } finally {
     setIsLoading(false)
@@ -96,14 +94,14 @@ export default function LoginPage() {
   }, [checkAuth]);
 
   return (
-    <>
-      {isLoading && <SportsLoader />}
-      <Card className="w-full">
+    <div className="w-full">
+      {isLoading ? (<SportsLoader />) : (
+        <Card className="w-full">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>Enter your credentials to access your account</CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -119,9 +117,9 @@ export default function LoginPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <Link href="/auth/forgot-password" className="text-sm text-primary underline-offset-4 hover:underline">
+                <LoadingLink href="/auth/forgot-password" className="text-sm text-primary underline-offset-4 hover:underline">
                   Forgot password?
-                </Link>
+                </LoadingLink>
               </div>
               <div className="relative">
                 <Input
@@ -158,13 +156,15 @@ export default function LoginPage() {
             </Button>
             <div className="text-center text-sm">
               Don&apos;t have an account?{" "}
-              <Link href="/auth/register" className="text-primary underline-offset-4 hover:underline">
+              <LoadingLink href="/auth/register" className="text-primary underline-offset-4 hover:underline">
                 Register
-              </Link>
+              </LoadingLink>
             </div>
           </CardFooter>
         </form>
       </Card>
-    </>
+      )}
+      
+    </div>
   )
 }

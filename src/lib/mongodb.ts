@@ -30,5 +30,5 @@ export default clientPromise
 
 export async function getDatabase():Promise<Db>{
     const client = await clientPromise;
-    return client.db('playerhubs');
+    return client.db('test');
 }

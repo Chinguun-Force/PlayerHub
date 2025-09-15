@@ -13,7 +13,7 @@ export const createProfileSlice: StateCreator<
   [],
   [],
   ProfileSlice
-> = (set, get) => ({
+> = (set) => ({
   profile: null,
   setProfile: (profile) =>
     set((state) => ({

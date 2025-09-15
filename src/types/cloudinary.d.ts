@@ -12,7 +12,7 @@ declare module 'cloudinary' {
           folder?: string;
           resource_type?: string;
         },
-        callback: (error: Error | undefined, result: any) => void
+        callback: (error: Error | undefined, result: unknown) => void
       ) => void;
     };
   };

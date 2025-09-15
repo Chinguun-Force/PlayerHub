@@ -3,6 +3,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "sonner";
+import { FooterSection } from "@/components/Footer";
+import { GlobalLoadingProvider } from "@/components/GlobalLoadingProvider";
+import { Suspense } from "react";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -35,10 +39,16 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
           >
-
-
-          <Nav />
-          {children}
+          <Suspense fallback={<div>Loading...</div>}>
+            <GlobalLoadingProvider>
+              <div className="flex min-h-screen flex-col justify-between">
+                <Nav />
+                <div>{children}</div>
+                <FooterSection />
+              </div>
+              <Toaster position="top-right" richColors />
+            </GlobalLoadingProvider>
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>

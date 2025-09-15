@@ -14,12 +14,12 @@ import {
 } from 'lucide-react'
 import {useAuthStore} from '@/store/authStore'
 import {useProfileStore} from '@/store/useProfileStore'
-import {useRouter} from 'next/navigation'
-import Link from 'next/link'
+import {useNavigationLoader} from '@/hooks/useNavigationLoader'
+import {LoadingLink} from './LoadingLink'
 
 const UserProfile = () => {
     const [open, setOpen] = useState(false)
-    const router = useRouter()
+    const { pushWithLoader } = useNavigationLoader()
 
     const handleLogout = () => {
         useAuthStore
@@ -28,7 +28,7 @@ const UserProfile = () => {
         useProfileStore
             .getState()
             .clearProfile()
-        router.push('/auth/login')
+        pushWithLoader('/')
     }
 
     return (
@@ -57,40 +57,40 @@ const UserProfile = () => {
                 <DropdownMenuContent
                     align="end"
                     className="w-56 bg-gray-50 dark:bg-gray-800 shadow-lg rounded-md p-2">
-                    <Link href="/players/myprofile">
+                    <LoadingLink href="/players/myprofile">
+                            <DropdownMenuItem
+                                className="flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 duration-300 rounded-xl cursor-pointer">
+                                <User className="h-4 w-4"/>
+                                <span>My Account</span>
+                            </DropdownMenuItem>
+                    </LoadingLink>
+                    <LoadingLink href="/players/myprofile">
                         <DropdownMenuItem
-                            className="flex items-center gap-2 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 duration-300 rounded-xl cursor-pointer">
-                            <User className="h-4 w-4"/>
-                            <span>My Account</span>
-                        </DropdownMenuItem>
-                    </Link>
-                    <Link href="/players/myprofile">
-                        <DropdownMenuItem
-                            className="flex items-center gap-2 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 duration-300 rounded-xl cursor-pointer">
+                            className="flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 duration-300 rounded-xl cursor-pointer">
                             <Trophy className="mr-2 h-4 w-4"/>
                             <span>My Teams</span>
                         </DropdownMenuItem>
-                    </Link>
-                    <Link href="/players/myprofile">
+                    </LoadingLink>
+                    <LoadingLink href="/players/myprofile">
                         <DropdownMenuItem
-                            className="flex items-center gap-2 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 duration-300 rounded-xl cursor-pointer">
+                            className="flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 duration-300 rounded-xl cursor-pointer">
                             <BarChart3 className="mr-2 h-4 w-4"/>
                             <span>Statistics</span>
                         </DropdownMenuItem>
-                    </Link>
-                    <Link href="/players/myprofile">
+                    </LoadingLink>
+                    <LoadingLink href="/players/myprofile">
                         <DropdownMenuItem
-                            className="flex items-center gap-2 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 duration-300 rounded-xl cursor-pointer">
+                            className="flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 duration-300 rounded-xl cursor-pointer">
                             <Settings className="mr-2 h-4 w-4"/>
                             <span>Settings</span>
                         </DropdownMenuItem>
-                    </Link>
+                    </LoadingLink>
                     <Button
                         variant="ghost"
                         className="hover:bg-gray-200 dark:hover:bg-gray-700 duration-300 rounded-xl cursor-pointer text-red-600 w-full flex justify-start m-0 p-0"
                         onClick={handleLogout}>
                         <DropdownMenuItem
-                            className="flex items-center py-2 hover:bg-gray-200 dark:hover:bg-gray-700 duration-300 rounded-xl cursor-pointer text-red-600">
+                            className="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-700 duration-300 rounded-xl cursor-pointer text-red-600">
                             <LogOut className="mr-2 h-4 w-4"/>
                             <span>Log out</span>
                         </DropdownMenuItem>

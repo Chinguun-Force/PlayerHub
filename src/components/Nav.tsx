@@ -1,17 +1,14 @@
 "use client"
 import React from 'react'
 import { Menus } from './MainMenu'
-import Link from 'next/link'
+import { LoadingLink } from './LoadingLink'
 import { Button } from './ui/button'
 import { useAuthStore } from '@/store/authStore'
 import UserProfile from './UserProfile'
-import { useThemeStore } from '@/store/themeStore'
 import DarkModeToggle from './DarkToggle'
 
 const Nav = () => {
   const user = useAuthStore();
-  const darkMode = useThemeStore((state) => state.darkMode);
-  const toggleDarkMode = useThemeStore((state) => state.toggleDarkMode);
 
   return (
     <div>
@@ -26,12 +23,12 @@ const Nav = () => {
             </>
           ) : (
             <>
-              <Link href="/login">
+              <LoadingLink href="/login">
                 <Button size="sm">Log in</Button>
-              </Link>
-              <Link href="/register">
+              </LoadingLink>
+              <LoadingLink href="/register">
                 <Button size="sm">Sign up</Button>
-              </Link>
+              </LoadingLink>
             </>
           )}
             </div>

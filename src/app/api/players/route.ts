@@ -4,7 +4,7 @@ import { getUserFromRequest } from '@/lib/auth'
 import { Player, Team } from '@/lib/models'
 import { ObjectId } from 'mongodb'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const db = await getDatabase()
     const playersCollection = db.collection<Player>('players')

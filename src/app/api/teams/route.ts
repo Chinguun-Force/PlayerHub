@@ -3,7 +3,7 @@ import { getDatabase } from '@/lib/mongodb'
 import { Team } from '@/lib/models'
 import { ObjectId } from 'mongodb'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const db = await getDatabase()
     const teamsCollection = db.collection<Team>('teams')

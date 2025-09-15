@@ -1,4 +1,5 @@
 export interface Team {
+    _id: string
     teamNameEn: string
     teamName: string
     teamLogo: string

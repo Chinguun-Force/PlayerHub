@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link"
+import { LoadingLink } from "./LoadingLink"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -50,13 +50,13 @@ export function Menus() {
         </SheetTrigger>
         <SheetContent side="left" className="w-[300px] sm:w-[400px]">
           <nav className="flex flex-col gap-4">
-            <Link href="/" className="flex items-center gap-2 font-semibold" onClick={() => setIsOpen(false)}>
+            <LoadingLink href="/" className="flex items-center gap-2 font-semibold" onClick={() => setIsOpen(false)}>
               <Trophy className="h-6 w-6" />
               <span className="font-bold">PlayerHub</span>
-            </Link>
+            </LoadingLink>
             <div className="grid gap-2 pt-4">
               {routes.map((route) => (
-                <Link
+                <LoadingLink
                   key={route.href}
                   href={route.href}
                   className={cn(
@@ -67,19 +67,19 @@ export function Menus() {
                 >
                   {route.icon}
                   {route.label}
-                </Link>
+                </LoadingLink>
               ))}
             </div>
           </nav>
         </SheetContent>
       </Sheet>
-      <Link href="/" className="flex items-center gap-2 font-semibold">
+      <LoadingLink href="/" className="flex items-center gap-2 font-semibold">
         <Trophy className="h-6 w-6" />
         <span className="font-bold hidden md:inline-block">PlayerHub</span>
-      </Link>
+      </LoadingLink>
       <nav className="mx-6 hidden items-center space-x-4 lg:space-x-6 lg:flex">
         {routes.map((route) => (
-          <Link
+          <LoadingLink
             key={route.href}
             href={route.href}
             className={cn(
@@ -88,7 +88,7 @@ export function Menus() {
             )}
           >
             {route.label}
-          </Link>
+          </LoadingLink>
         ))}
       </nav>
     </div>

@@ -15,7 +15,7 @@ const DarkModeToggle = () => {
   }, [darkMode]);
 
    return (
-    <div className='border border-gray-300 dark:border-gray-700 rounded-full p-1 transition-colors duration-300 flex items-center justify-center w-12 h-6'>
+    <div className='border border-gray-300 dark:border-gray-700 rounded-full p-1 transition-colors duration-300 flex items-center justify-center w-10 h-6'>
         <button
             className="toggle-container"
             style={{

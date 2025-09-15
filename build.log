@@ -1,0 +1,46 @@
+yarn run v1.22.22
+$ next build --turbopack
+   ▲ Next.js 15.5.0 (Turbopack)
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Finished writing to disk in 154ms
+ ✓ Compiled successfully in 17.5s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/12) ...
+   Generating static pages (3/12) 
+   Generating static pages (6/12) 
+   Generating static pages (9/12) 
+ ✓ Generating static pages (12/12)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                         Size  First Load JS
+┌ ƒ /                                0 B         217 kB
+├ ○ /_not-found                      0 B         215 kB
+├ ƒ /api/auth/login                  0 B            0 B
+├ ƒ /api/auth/register               0 B            0 B
+├ ƒ /api/players                     0 B            0 B
+├ ƒ /api/players/[id]                0 B            0 B
+├ ƒ /api/teams                       0 B            0 B
+├ ƒ /api/teams/[id]                  0 B            0 B
+├ ○ /login                       2.81 kB         217 kB
+├ ○ /players                     18.7 kB         233 kB
+├ ○ /register                    4.35 kB         219 kB
+└ ○ /teams                       7.59 kB         222 kB
++ First Load JS shared by all     228 kB
+  ├ chunks/0656f51f27ce398d.js   17.1 kB
+  ├ chunks/202abb9aed9e828b.js   59.2 kB
+  ├ chunks/5564f493499345f1.js   24.1 kB
+  ├ chunks/783716299a3fba41.js   47.9 kB
+  ├ chunks/7f4ed4ac886c2606.js   18.3 kB
+  └ chunks/dee31628d990fe4f.js   10.9 kB
+  ├ chunks/510fe86f9c15dbe4.css  13.1 kB
+  └ other shared chunks (total)  37.2 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+Done in 68.59s.

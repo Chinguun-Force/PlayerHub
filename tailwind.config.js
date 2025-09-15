@@ -20,8 +20,8 @@ module.exports = {
         },
       },
       animation: {
-        bxSpin: "bxSpin 0.5s linear infinite",
-        shadow: "shadow 0.5s linear infinite",
+        bxSpin: "bxSpin 1s linear infinite",
+        shadow: "shadow 1s linear infinite",
       },
     },
   },

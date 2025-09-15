@@ -1,6 +1,11 @@
 declare global {
   interface Window {
-    cloudinary: any;
+    cloudinary: {
+      config: (config: { cloud_name: string; api_key: string; api_secret: string }) => void;
+      uploader: {
+        upload: (file: string, options: { folder?: string; resource_type?: string }, callback: (error: Error | undefined, result: unknown) => void) => void;
+      };
+    };
   }
 }
 
